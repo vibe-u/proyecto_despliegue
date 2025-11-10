@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import Eventos from "./pages/eventos/Eventos";
 import Beneficios from "./pages/beneficios/Beneficios";
 import Dashboard from "./pages/dashboard/Dashboard";
+import Matches from "./pages/Matches/Matches";
 import AOS from "aos";
 import 'aos/dist/aos.css';
 
@@ -29,6 +30,7 @@ useEffect(() => {
         <Route path="eventos" element={<Eventos />} />
         <Route path="beneficios" element={<Beneficios />} />
         <Route path="dashboard" element={<Dashboard />} />
+        <Route path="matches" element={<Matches />} />
       </Routes>
       
     </BrowserRouter>

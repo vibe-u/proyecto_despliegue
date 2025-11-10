@@ -9,6 +9,7 @@ const Dashboard = () => {
     const navigate = useNavigate();
     const [userName, setUserName] = useState("usuario");
     const [isLoading, setIsLoading] = useState(true);
+    const [quote, setQuote] = useState(""); // Estado para la frase motivadora
     const toastShown = useRef(false); // <-- persiste entre renders
 
     const handleLogout = () => {
@@ -37,7 +38,21 @@ const Dashboard = () => {
             }
         };
 
+        //API pública de la frase
+        const fetchQuote = async () => {
+            try {
+
+                const response = await axios.get("https://zenquotes.io/api/random");
+                const randomIndex = Math.floor(Math.random() * response.data.length);
+                const frase = response.data[randomIndex].text;
+                const autor = response.data[randomIndex].author || "Anónimo";
+                setQuote(`"${frase}" — ${autor}`);
+            } catch (error) {
+                console.error("Error al obtener la frase motivadora:", error);
+            }
+        };
         fetchUserName();
+        fetchQuote();
 
         const token = localStorage.getItem('token');
         if (token && !toastShown.current) {
@@ -70,10 +85,16 @@ const Dashboard = () => {
                 {isLoading ? (
                     <h2>Cargando...</h2>
                 ) : (
-                    <h2>¡Bienvenido de nuevo, {userName}!</h2>
+                    <h2>¡Bienvenido de nuevo, {userName}!!</h2>
                 )}
 
                 <p>Explora lo mejor de tu comunidad universitaria.</p>
+                {/* Frase motivadora */}
+                {quote && (
+                    <div className="motivational-quote" data-aos="fade-up">
+                        <p>{quote}</p>
+                    </div>
+                )}
             </div>
 
             <div className="dashboard-grid">
@@ -90,7 +111,10 @@ const Dashboard = () => {
                 <div className="dashboard-card matches-card" data-aos="fade-up" data-aos-delay="400">
                     <h3 className="card-title">Tus Posibles Matches 💖</h3>
                     <p>Conecta con estudiantes que comparten tu Vibe y tus metas académicas.</p>
-                    <button className="dashboard-btn">Ver Matches</button>
+                    <button className="dashboard-btn" onClick={() => navigate("/matches")}>
+                        Ver Matches
+                    </button>
+
                 </div>
             </div>
         </section>

@@ -40,5 +40,3 @@ app.listen(app.get("port"), "0.0.0.0", () => {
 });
 
 export default app;
-
-// Register.jsx
