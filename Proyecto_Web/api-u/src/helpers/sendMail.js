@@ -1,20 +1,29 @@
-import sendMail from "../config/nodemailer.js";
+import nodemailer from "nodemailer";
+import dotenv from "dotenv";
+dotenv.config();
 
-const sendMailToRegister = (userMail, token) => {
-    return sendMail(
-        userMail,
-        "Bienvenido a Vibe-U 🎓",
-        `
-            <h1>Confirma tu cuenta</h1>
-            <p>¡Hola! Gracias por unirte a <b>Vibe-U</b>, la app que pone a la U en modo social.</p>
-            <p>Haz clic en el siguiente enlace para confirmar tu cuenta:</p>
-            <a href="${process.env.URL_BACKEND}/confirmar/${token}">
-                Confirmar cuenta
-            </a>
-            <hr>
-            <footer>El equipo de Vibe-U te da la más cordial bienvenida 💜</footer>
-        `
-    );
+const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+        user: process.env.USER_EMAIL,
+        pass: process.env.USER_PASS
+    }
+});
+
+// 👉 Función genérica para enviar correos
+const sendMail = async (to, subject, html) => {
+    try {
+        const info = await transporter.sendMail({
+            from: '"Vibe-U 🎓" <noreply@vibeu.com>',
+            to,
+            subject,
+            html
+        });
+        console.log("✅ Email enviado:", info.messageId);
+    } catch (error) {
+        console.error("❌ Error enviando email:", error.message);
+    }
 };
 
-export { sendMailToRegister };
+// 👇 ESTA LÍNEA ES CLAVE
+export default sendMail;

@@ -18,6 +18,7 @@ const registro = async (req, res) => {
         const nuevoUsuario = new Usuario(req.body);
         nuevoUsuario.password = await nuevoUsuario.encryptPassword(password);
         const token = nuevoUsuario.createToken();
+        nuevoUsuario.token = token;
 
         await sendMailToRegister(correoInstitucional, token);
         await nuevoUsuario.save();
@@ -36,18 +37,20 @@ const confirmarMail = async (req, res) => {
         const usuarioBDD = await Usuario.findOne({ token });
 
         if (!usuarioBDD) {
-            return res.status(404).json({ msg: "Token inválido o cuenta ya confirmada" });
+            // 🔴 Token inválido: redirige a interfaz de error
+            return res.redirect(`${process.env.URL_FRONTEND}/confirmar/error`);
         }
 
         usuarioBDD.token = null;
         usuarioBDD.confirmEmail = true;
         await usuarioBDD.save();
 
-        res.status(200).json({ msg: "Cuenta confirmada, ya puedes iniciar sesión" });
-
+        // 🟢 Redirige a interfaz de éxito
+        return res.redirect(`${process.env.URL_FRONTEND}/confirmar/exito`);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: `❌ Error en el servidor - ${error.message}` });
+        // 🔴 Si algo falla, redirige también a error
+        return res.redirect(`${process.env.URL_FRONTEND}/confirmar/error`);
     }
 };
 
