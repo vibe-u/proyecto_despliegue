@@ -177,6 +177,11 @@ const loginUsuario = async (req, res) => {
     }
 };
 
+const perfil = (req, res) => {
+    const { password, token, resetToken, resetTokenExpire, ...usuarioSeguro } = req.usuario;
+    res.status(200).json(usuarioSeguro);
+};
+
 
 // =========================================================
 // EXPORTAR
@@ -188,4 +193,5 @@ export {
     comprobarTokenPassword,
     crearNuevoPassword,
     loginUsuario,
+    perfil
 };

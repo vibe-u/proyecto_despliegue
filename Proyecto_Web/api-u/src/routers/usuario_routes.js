@@ -3,6 +3,9 @@ import Usuario from "../models/Usuario.js";
 import jwt from "jsonwebtoken";
 import { sendMailToRegister, sendMailToRecoveryPassword } from "../config/nodemailer.js";
 import bcrypt from "bcryptjs";
+import { verificarTokenJWT } from "../middlewares/JWT.js";
+import { perfil } from "../controllers/usuario_controller.js";
+
 
 const router = express.Router();
 
@@ -206,6 +209,30 @@ router.post("/reset-password/:token", async (req, res) => {
     } catch (error) {
         console.error("ERROR EN RESET PASSWORD:", error);
         res.status(500).json({ msg: "Error del servidor" });
+    }
+});
+
+router.get("/perfil", verificarTokenJWT, perfil);
+
+// ELIMINAR USUARIO (solo a sí mismo)
+router.delete("/eliminar", async (req, res) => {
+    try {
+        const authHeader = req.headers.authorization;
+
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            return res.status(401).json({ msg: "Token no proporcionado" });
+        }
+
+        const token = authHeader.split(" ")[1];
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        await Usuario.findByIdAndDelete(decoded.id);
+
+        res.json({ msg: "Usuario eliminado correctamente" });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ msg: "Error al eliminar usuario" });
     }
 });
 
