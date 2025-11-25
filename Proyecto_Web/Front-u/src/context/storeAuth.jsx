@@ -1,22 +1,25 @@
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
-
 const storeAuth = create(
     persist(
-        
-        set => ({
+        (set) => ({
             token: null,
-            rol:null,
+            rol: null,
+
             setToken: (token) => set({ token }),
             setRol: (rol) => set({ rol }),
-            clearToken: () => set({ token: null})
+
+            clearToken: () => set({
+                token: null,
+                rol: null
+            }),
         }),
 
-        { name: "auth-token" }
-    
+        {
+            name: "auth-token"  // ← aquí se guarda en localStorage
+        }
     )
 )
-
 
 export default storeAuth
