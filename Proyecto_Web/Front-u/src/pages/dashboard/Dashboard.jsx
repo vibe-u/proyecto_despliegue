@@ -49,24 +49,22 @@ const Dashboard = () => {
         const fetchQuote = async () => {
             try {
                 const response = await axios.get(
-                    "https://api.allorigins.win/get?url=https://zenquotes.io/api/random"
+                    `${import.meta.env.VITE_BACKEND_URL}/frase`
                 );
 
-                const data = JSON.parse(response.data.contents);
-                const { q: frase, a: autor } = data[0];
+                const { q: frase, a: autor } = response.data[0];
 
                 const traduccion = await axios.get(
                     `https://api.mymemory.translated.net/get?q=${encodeURIComponent(frase)}&langpair=en|es`
                 );
 
-                const fraseTraducida = traduccion.data.responseData.translatedText;
-
-                setQuote({ texto: `"${fraseTraducida}"`, autor });
+                setQuote({ texto: `"${traduccion.data.responseData.translatedText}"`, autor });
 
             } catch (error) {
                 console.error("Error al obtener frase motivadora:", error);
             }
         };
+
 
         fetchUserInfo();
         fetchQuote();
