@@ -12,13 +12,17 @@ if (!USER_EMAIL || !USER_PASS || !URL_BACKEND || !URL_FRONTEND) {
 // 🔹 Transportador SMTP Gmail
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
+  port: 587,
+  secure: false, // true para 465, false para 587
   auth: {
-    user: USER_EMAIL,
-    pass: USER_PASS,
+    user: process.env.USER_EMAIL,
+    pass: process.env.USER_PASS,
   },
+  tls: {
+    rejectUnauthorized: false
+  }
 });
+
 
 // ======================================================
 // 🔹 Función genérica para envíos de registro
