@@ -73,6 +73,45 @@
     font-weight: 700;
 }
 
+/* ---------------------------------------------------- */
+/* AJUSTES FALTANTES DEL AVATAR DE PC (Visto en la imagen) */
+/* Asegura que el contenido del panel fijo (main-nav-panel) se vea igual que en PC */
+/* ---------------------------------------------------- */
+
+.desktop-avatar-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 25px; 
+    width: 100%;
+}
+
+.desktop-avatar-container {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 10px;
+    border: 3px solid white; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.desktop-avatar-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.desktop-status {
+    background-color: #03a800; /* Verde para "Disponible" */
+    color: white;
+    font-size: 0.75rem;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    margin-top: 5px;
+    font-weight: 600;
+}
+
 /* =================================== */
 /* === PANEL DERECHO (Right-Panel) === */
 /* =================================== */
@@ -134,6 +173,7 @@
     transform: translateX(-100%);
     transition: transform 0.45s cubic-bezier(0.25, 0.8, 0.25, 1);
     z-index: 3000;
+    /* Aseguramos que se muestre en mobile cuando se le agregue la clase .show */
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -299,6 +339,7 @@
 
 /* ---------------------------------------------------- */
 /* RESPONSIVE MEDIA QUERIES (Ajustes para Móvil)        */
+/* Hacemos visibles el panel principal (inline), el botón de hamburguesa y el menú deslizable (off-screen) */
 /* ---------------------------------------------------- */
 
 @media (max-width: 768px) {
@@ -307,35 +348,48 @@
         flex-direction: column; 
     }
 
-    /* 2. Ocultar el panel principal y hacerlo aparecer con el menú hamburguesa */
-    /* El panel principal (main-nav-panel) ahora es invisible en móvil y lo que se usa es el side-menu */
+    /* 2. MOSTRAR el panel principal (púrpura) y hacerlo ocupar el 100% */
     .main-nav-panel {
-        display: none; 
+        display: flex; /* Asegura que se vea */
+        width: 100%; /* Ocupa todo el ancho del celular */
+        height: auto; /* Permite que el contenido determine la altura */
+        position: relative; /* Fluye con el scroll */
+        padding-top: 20px; /* Ajuste de padding para móvil */
+        padding-bottom: 20px;
     }
     
     /* 3. El contenido principal (right-panel) ocupa todo el ancho */
     .right-panel {
         width: 100%;
-        padding-top: 60px; /* Espacio para el botón de hamburguesa flotante */
+        /* No necesitamos padding extra arriba si el panel principal ya está ahí */
+        padding-top: 30px; 
         padding-left: 15px;
         padding-right: 15px;
         flex-shrink: 0;
+        min-height: auto; /* Lo dejamos en auto para que fluya con el contenido */
+    }
+
+    /* 4. El menú desplegable (side-menu) permanece accesible (flotará sobre todo al activarse) */
+    .side-menu {
+        display: flex; /* Asegura que la capa esté presente */
     }
     
-    /* 4. La cartilla de perfil ocupa todo el ancho disponible */
+    /* 5. AJUSTAR la visibilidad y apariencia del botón de hamburguesa en móvil */
+    .hamburger-btn {
+        display: flex; /* Asegura que se vea */
+        /* Eliminamos el fondo blanco y la sombra para que sea transparente */
+        background-color: transparent; 
+        border-radius: 0;
+        padding: 5px;
+        top: 10px;
+        left: 10px;
+        box-shadow: none;
+    }
+    
+    /* 6. La cartilla de perfil ocupa todo el ancho disponible */
     .user-profile-section {
         width: 100%;
         max-width: 100%;
         margin: 0 auto;
-    }
-    
-    /* 5. Asegurar que el botón de hamburguesa flote y tenga buen contraste */
-    .hamburger-btn {
-        background-color: #ffffff; 
-        border-radius: 5px;
-        padding: 5px;
-        top: 10px;
-        left: 10px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
 }

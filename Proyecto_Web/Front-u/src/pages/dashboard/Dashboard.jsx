@@ -4,7 +4,7 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import './Dashboard.css';
-import storeAuth from "../../context/storeAuth";   // ⬅ IMPORTANTE
+import storeAuth from "../../context/storeAuth";   
 
 const Dashboard = () => {
     const navigate = useNavigate();
@@ -14,30 +14,35 @@ const Dashboard = () => {
     const [quote, setQuote] = useState("");
     const [menuOpen, setMenuOpen] = useState(false);
     const [avatar, setAvatar] = useState(null);
+
     const fileInputRef = useRef(null);
 
-    // 👉 Logout REAL (ZUSTAND + localStorage)
+    // 🚀 Logout
     const handleLogout = () => {
-        localStorage.clear();                  // Limpia el storage
-        storeAuth.getState().clearToken();     // Limpia el Zustand (la parte clave)
-        navigate("/login");                    // Redirige
+        localStorage.clear();
+        storeAuth.getState().clearToken();
+        navigate("/login");
     };
 
+    // 📌 CARGAR USUARIO + AVATAR
     useEffect(() => {
 
         const fetchUserInfo = async () => {
             try {
-                const token = storeAuth.getState().token;  // ⬅ usar Zustand aquí
+                const token = storeAuth.getState().token;
 
                 if (!token) return setIsLoading(false);
 
-                const response = await axios.get(
+                const res = await axios.get(
                     `${import.meta.env.VITE_BACKEND_URL}/perfil`,
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
 
-                if (response.data?.nombre) setUserName(response.data.nombre);
-                if (response.data?.rol) setUserRole(response.data.rol);
+                if (res.data?.nombre) setUserName(res.data.nombre);
+                if (res.data?.rol) setUserRole(res.data.rol);
+
+                // ✔ Cargar avatar desde backend
+                if (res.data?.avatar) setAvatar(res.data.avatar);
 
             } catch (error) {
                 console.error("Error al obtener el usuario:", error);
@@ -61,14 +66,14 @@ const Dashboard = () => {
                 setQuote({ texto: `"${traduccion.data.responseData.translatedText}"`, autor });
 
             } catch (error) {
-                console.error("Error al obtener frase motivadora:", error);
+                console.error("Error frase motivadora:", error);
             }
         };
 
         fetchUserInfo();
         fetchQuote();
 
-        // Mostrar toast SOLO al iniciar sesión
+        // 🟦 Toast solo al iniciar sesión
         const token = storeAuth.getState().token;
         const toastShownBefore = localStorage.getItem("loginToastShown");
 
@@ -84,8 +89,10 @@ const Dashboard = () => {
 
     }, []);
 
+    // 📸 Abrir selector de archivo
     const handleFileClick = () => fileInputRef.current.click();
 
+    // 📸 Vista previa del avatar nuevo
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -177,7 +184,7 @@ const Dashboard = () => {
             <div className="dashboard-grid">
                 <div className="dashboard-card events-card">
                     <h3 className="card-title">Eventos en tu U 🎉</h3>
-                    <p>Descubre los próximos eventos en tu campus.</p>
+                    <p>Descubre próximos eventos en tu campus.</p>
                     <button className="dashboard-btn">Ver Eventos</button>
                 </div>
 

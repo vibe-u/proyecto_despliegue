@@ -1,5 +1,6 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./Ajustes.css";
 
 const Ajustes = () => {
@@ -13,15 +14,43 @@ const Ajustes = () => {
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
+  // 🔵 CARGAR AVATAR DESDE EL BACKEND -->
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        const res = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL.replace("/api/usuarios", "")}/api/usuarios/perfil`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        // Si el usuario tiene avatar guardado →
+        if (res.data?.avatar) {
+          setAvatar(res.data.avatar);
+        }
+      } catch (error) {
+        console.log("Error cargando avatar:", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  // 🔵 Subir avatar desde el input
   const handleFileClick = () => fileInputRef.current.click();
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setAvatar(URL.createObjectURL(file));
+      setAvatar(URL.createObjectURL(file)); // Muestra preview
     }
   };
 
+  // 🔴 Cerrar sesión
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/login");
@@ -87,7 +116,6 @@ const Ajustes = () => {
       <div className="ajustes-card">
         <h3>Cuenta</h3>
 
-        {/* --- ACTUALIZAR INFO DE CUENTA --- */}
         <div
           className="ajustes-row hover-card"
           onClick={() => navigate("/ActualizarInfo")}
@@ -97,8 +125,8 @@ const Ajustes = () => {
         </div>
 
         <div className="ajustes-row hover-highlight">
-  <span>Cambiar contraseña</span>
-</div>
+          <span>Cambiar contraseña</span>
+        </div>
       </div>
 
       {/* ---------------- PERSONALIZACIÓN ---------------- */}
@@ -146,9 +174,9 @@ const Ajustes = () => {
       <div className="ajustes-card">
         <h3>Sesión</h3>
 
-       <div className="ajustes-row hover-highlight">
-  <span>Cerrar sesión</span>
-</div>
+        <div className="ajustes-row hover-highlight" onClick={handleLogout}>
+          <span>Cerrar sesión</span>
+        </div>
       </div>
 
     </section>
