@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: vibe-u-backend
+    runtime: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGO_URI
+        sync: false
+      - key: USER_EMAIL
+        sync: false
+      - key: USER_PASS
+        sync: false
+      - key: URL_BACKEND
+        sync: false
+      - key: URL_FRONTEND
+        sync: false
+      - key: PORT
+        value: 3000
+      - key: JWT_SECRET
+        sync: false
+      - key: CLOUD_NAME
+        sync: false
+      - key: CLOUD_API_KEY
+        sync: false
+      - key: CLOUD_API_SECRET
+        sync: false
