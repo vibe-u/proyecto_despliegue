@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "./ActualizarInfo.css";
 
 // ➡️ Asegúrate de que esta ruta sea correcta para tu AvatarCropperModal
-import AvatarCropperModal from "../components/Avatar/AvatarCropperModal";
+import AvatarCropperModal from "../components/Avatar/AvatarCropperModal.jsx";
 
 const ActualizarInfo = () => {
   const navigate = useNavigate();
@@ -14,10 +14,10 @@ const ActualizarInfo = () => {
 
   const [avatar, setAvatar] = useState(null);
   const [avatarModalOpen, setAvatarModalOpen] = useState(false);
-  
+
   // ➡️ NUEVOS ESTADOS para el recorte
-  const [imageToCrop, setImageToCrop] = useState(null); 
-  const [cropperModalOpen, setCropperModalOpen] = useState(false); 
+  const [imageToCrop, setImageToCrop] = useState(null);
+  const [cropperModalOpen, setCropperModalOpen] = useState(false);
 
   const [userName, setUserName] = useState("");
   const [userPhone, setUserPhone] = useState("");
@@ -58,8 +58,11 @@ const ActualizarInfo = () => {
       } catch (err) {
         // 🛑 CAMBIO CLAVE: Elimina el toast.error para evitar el mensaje
         // y el return previene que se sobrescriban los estados
-        console.error("Error al cargar datos del usuario, manteniendo la información actual:", err.response?.data || err);
-        return; 
+        console.error(
+          "Error al cargar datos del usuario, manteniendo la información actual:",
+          err.response?.data || err
+        );
+        return;
       }
     };
 
@@ -75,7 +78,7 @@ const ActualizarInfo = () => {
 
     // Convertir el archivo a Data URL para el cropper
     const reader = new FileReader();
-    reader.addEventListener('load', () => {
+    reader.addEventListener("load", () => {
       setImageToCrop(reader.result); // Guarda la URL para el cropper
       setCropperModalOpen(true); // Abre el modal de recorte
     });
@@ -94,7 +97,7 @@ const ActualizarInfo = () => {
 
     // ➡️ Lógica de Cloudinary usando el Blob recortado
     const formData = new FormData();
-    formData.append("file", croppedImageBlob); 
+    formData.append("file", croppedImageBlob);
     formData.append("upload_preset", "VIBE-U");
     formData.append("folder", "avatars");
 
@@ -106,7 +109,10 @@ const ActualizarInfo = () => {
       setAvatar(res.data.secure_url);
       toast.success("Avatar subido y ajustado correctamente");
     } catch (err) {
-      console.error("Error al subir la imagen recortada:", err.response?.data || err);
+      console.error(
+        "Error al subir la imagen recortada:",
+        err.response?.data || err
+      );
       toast.error("Error al subir avatar");
     }
   };
@@ -137,9 +143,9 @@ const ActualizarInfo = () => {
       // Manejo de error más detallado
       console.error("Error al actualizar la información:", err.response?.data || err);
       if (err.response && err.response.status === 404) {
-         toast.error("Error 404: La ruta de actualización no fue encontrada.");
+        toast.error("Error 404: La ruta de actualización no fue encontrada.");
       } else {
-         toast.error("Error al guardar la información.");
+        toast.error("Error al guardar la información.");
       }
     }
   };
@@ -153,16 +159,24 @@ const ActualizarInfo = () => {
       <div className="avatar-wrapper">
         {/* Usamos las clases de tu CSS original */}
         <div className="avatar-circle" onClick={handleFileClick}>
-          {avatar ? 
-            <img src={avatar} alt="Avatar" className="avatar-img-preview" /> 
-            : 
-            <span className="default-avatar">👤</span>}
+          {avatar ? (
+            <img src={avatar} alt="Avatar" className="avatar-img-preview" />
+          ) : (
+            <span className="default-avatar">👤</span>
+          )}
         </div>
 
         <div className="btns-avatar">
           {/* Usamos las clases de tu CSS original */}
-          <button className="btn-upload" onClick={handleFileClick}>Subir foto</button>
-          <button className="btn-select" onClick={() => setAvatarModalOpen(!avatarModalOpen)}>Elegir avatar</button>
+          <button className="btn-upload" onClick={handleFileClick}>
+            Subir foto
+          </button>
+          <button
+            className="btn-select"
+            onClick={() => setAvatarModalOpen(!avatarModalOpen)}
+          >
+            Elegir avatar
+          </button>
         </div>
 
         <input
@@ -185,12 +199,15 @@ const ActualizarInfo = () => {
                   key={i}
                   src={url}
                   className="avatar-option"
-                  onClick={() => { setAvatar(url); setAvatarModalOpen(false); }}
+                  onClick={() => {
+                    setAvatar(url);
+                    setAvatarModalOpen(false);
+                  }}
                   alt={`avatar-${i}`}
                 />
               ))}
             </div>
-            <button 
+            <button
               className="modal-close-btn"
               onClick={() => setAvatarModalOpen(false)}
             >
@@ -211,58 +228,86 @@ const ActualizarInfo = () => {
       )}
       {/* ---------------------------------- */}
 
-
       <div className="form-section">
         <div className="field-row">
           <label className="field-label">Usuario</label>
-          <input className="field-input" value={userName} onChange={e => setUserName(e.target.value)} placeholder="Nombre de usuario" />
+          <input
+            className="field-input"
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)}
+            placeholder="Nombre de usuario"
+          />
         </div>
 
         <div className="field-row">
           <label className="field-label">Descripción</label>
-          <textarea className="field-input textarea-input" value={userDescription} onChange={e => setUserDescription(e.target.value)} placeholder="Breve descripción" />
+          <textarea
+            className="field-input textarea-input"
+            value={userDescription}
+            onChange={(e) => setUserDescription(e.target.value)}
+            placeholder="Breve descripción"
+          />
         </div>
 
         <div className="field-row">
           <label className="field-label">Teléfono</label>
-          <input className="field-input" value={userPhone} onChange={e => setUserPhone(e.target.value)} placeholder="Ej: +593 9..." />
+          <input
+            className="field-input"
+            value={userPhone}
+            onChange={(e) => setUserPhone(e.target.value)}
+            placeholder="Ej: +593 9..."
+          />
         </div>
 
         <div className="field-row">
           <label className="field-label">Dirección</label>
-          <input className="field-input" value={userAddress} onChange={e => setUserAddress(e.target.value)} placeholder="Dirección" />
+          <input
+            className="field-input"
+            value={userAddress}
+            onChange={(e) => setUserAddress(e.target.value)}
+            placeholder="Dirección"
+          />
         </div>
 
         <div className="field-row">
           <label className="field-label">Cédula</label>
-          <input className="field-input" value={userCedula} onChange={e => setUserCedula(e.target.value)} placeholder="No. de cédula" />
+          <input
+            className="field-input"
+            value={userCedula}
+            onChange={(e) => setUserCedula(e.target.value)}
+            placeholder="No. de cédula"
+          />
         </div>
 
         <div className="field-row">
           <label className="field-label">Universidad</label>
-          <input className="field-input" value={userUniversity} onChange={e => setUserUniversity(e.target.value)} placeholder="Nombre de la universidad" />
+          <input
+            className="field-input"
+            value={userUniversity}
+            onChange={(e) => setUserUniversity(e.target.value)}
+            placeholder="Nombre de la universidad"
+          />
         </div>
 
         <div className="field-row">
           <label className="field-label">Carrera</label>
-          <input className="field-input" value={userCareer} onChange={e => setUserCareer(e.target.value)} placeholder="Tu carrera" />
+          <input
+            className="field-input"
+            value={userCareer}
+            onChange={(e) => setUserCareer(e.target.value)}
+            placeholder="Tu carrera"
+          />
         </div>
+
         <div className="btn-row">
-  <button 
-    className="cancel-btn" 
-    onClick={() => navigate("/ajustes")}
-  >
-    Cancelar
-  </button>
+          <button className="cancel-btn" onClick={() => navigate("/ajustes")}>
+            Cancelar
+          </button>
 
-  <button 
-    className="save-btn"
-    onClick={handleUpdate}
-  >
-    Guardar cambios
-  </button>
-</div>
-
+          <button className="save-btn" onClick={handleUpdate}>
+            Guardar cambios
+          </button>
+        </div>
       </div>
     </div>
   );

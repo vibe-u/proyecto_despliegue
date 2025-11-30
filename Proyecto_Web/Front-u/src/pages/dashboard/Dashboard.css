@@ -142,19 +142,19 @@
 /*      MENÚ LATERAL            */
 /* ---------------------------- */
 .side-menu {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 260px;
-  height: 100%;
-  background: #760265;
-  color: white;
-  padding: 30px 20px;
-  transform: translateX(-100%);
-  transition: transform 0.45s ease;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* Los botones quedarán a la izquierda */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 260px;
+    height: 100%;
+    background: #760265;
+    color: white;
+    padding: 30px 20px;
+    transform: translateX(-100%);
+    transition: transform 0.45s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Los botones quedarán a la izquierda */
 }
 
 /* Cuando el menú se muestra */
@@ -179,19 +179,17 @@
 }
 
 .menu-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* centra título y avatar */
-  width: 100%;
-  margin-top: 50px; /* <--- esto los baja */
-  margin-bottom: 30px; /* separa de los botones */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* centra título y avatar */
+    width: 100%;
+    margin-top: 50px; /* <--- esto los baja */
+    margin-bottom: 30px; /* separa de los botones */
 }
-
-
 .menu-title {
-  text-align: center;
-  font-size: 1.3rem;
-  margin-bottom: 15px;
+    text-align: center;
+    font-size: 1.3rem;
+    margin-bottom: 15px;
 }
 
 /* ---------------------------- */

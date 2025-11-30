@@ -26,7 +26,6 @@ const Dashboard = () => {
 
     // 📌 CARGAR USUARIO + AVATAR
     useEffect(() => {
-
         const fetchUserInfo = async () => {
             try {
                 const token = storeAuth.getState().token;

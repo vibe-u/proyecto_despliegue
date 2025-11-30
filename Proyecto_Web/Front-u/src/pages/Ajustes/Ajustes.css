@@ -2,7 +2,7 @@
 .ajustes-section {
   font-family: 'Poppins', sans-serif;
   padding: 90px 20px 30px 20px;
-  background: white;
+  background: rgba(255, 255, 255, 0.712);
   min-height: 100vh;
 }
 

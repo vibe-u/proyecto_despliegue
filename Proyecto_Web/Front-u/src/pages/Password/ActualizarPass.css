@@ -1,14 +1,4 @@
 /* ---------------------------------------------------- */
-/* Estilos Globales (Asegúrate de que no choquen con otros estilos) */
-/* ---------------------------------------------------- */
-body {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-  background-color: #f7f7f7; /* Fondo similar al de la imagen */
-}
-
-/* ---------------------------------------------------- */
 /* Contenedor Principal */
 /* ---------------------------------------------------- */
 .password-change-container {
