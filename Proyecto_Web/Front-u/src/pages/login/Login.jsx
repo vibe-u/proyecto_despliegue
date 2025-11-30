@@ -20,6 +20,9 @@ const Login = () => {
         const loadingToast = toast.loading("Iniciando sesión...");
 
         try {
+            // En Login.jsx, antes del axios.post:
+            console.log("🔍 URL Backend:", import.meta.env.VITE_BACKEND_URL);
+            console.log("🔍 URL completa:", `${import.meta.env.VITE_BACKEND_URL}/login`);
             const res = await axios.post(
                 `${import.meta.env.VITE_BACKEND_URL}/login`,
                 {

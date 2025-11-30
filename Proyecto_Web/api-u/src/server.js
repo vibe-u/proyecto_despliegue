@@ -15,13 +15,11 @@ const allowedOrigins = [
 ];
 // ✅ Middlewares
 app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-        } else {
-        callback(new Error("No permitido por CORS"));
-        }
-    },
+    origin: [
+        process.env.URL_FRONTEND,
+        "http://localhost:5173",  // para desarrollo
+        "https://proyectovibe-u.netlify.app"  // tu dominio de producción
+    ],
     credentials: true
 }));
 
