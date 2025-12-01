@@ -11,7 +11,7 @@ if (!RESEND_API_KEY || !URL_BACKEND || !URL_FRONTEND || !USER_EMAIL) {
 }
 
 // 🔹 Inicializamos Resend
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = new Resend(RESEND_API_KEY);
 
 // ======================================================
 // 🚫 Lista negra de dominios
@@ -57,7 +57,12 @@ const sendMail = async (to, subject, html) => {
     console.log("📩 Email enviado con Resend:", emailId);
     return res;
   } catch (error) {
-    console.error("❌ Error enviando email de registro:", error.response || error.message || error);
+    // 💡 MODIFICACIÓN: Imprimimos el error de la API de Resend para saber la causa exacta.
+    if (error.name === 'Error' && error.message) {
+      console.error("❌ Error API de Resend:", error.message);
+    } else {
+        console.error("❌ Error enviando email:", error.response?.body || error.message || error);
+    }
     throw error;
   }
 };
