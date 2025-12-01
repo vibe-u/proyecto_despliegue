@@ -11,7 +11,7 @@ if (!RESEND_API_KEY || !URL_BACKEND || !URL_FRONTEND || !USER_EMAIL) {
 }
 
 // 🔹 Inicializamos Resend
-const resend = new Resend(RESEND_API_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // ======================================================
 // 🚫 Lista negra de dominios
@@ -44,12 +44,17 @@ const sendMail = async (to, subject, html) => {
 
   try {
     const res = await resend.emails.send({
-      from: `Vibe-U 🎓 <${USER_EMAIL}>`,  // Usamos el correo de usuario
+      from: `Vibe-U 🎓 <${USER_EMAIL}>`, 
       to,
       subject,
       html
     });
-    console.log("📩 Email enviado con Resend:", res.id);
+
+    // 💡 MODIFICACIÓN CLAVE AQUÍ: Accede a la propiedad que realmente tiene el ID.
+    // Usamos el operador de encadenamiento opcional (?.) para evitar errores si la estructura cambia.
+    const emailId = res.id || (res.data && res.data[0]?.id) || "ID no disponible";
+
+    console.log("📩 Email enviado con Resend:", emailId);
     return res;
   } catch (error) {
     console.error("❌ Error enviando email de registro:", error.response || error.message || error);
