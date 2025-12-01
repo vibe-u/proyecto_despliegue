@@ -72,7 +72,7 @@ const sendMail = async (to, subject, html) => {
 // 🟣 CORREO DE CONFIRMACIÓN (Registro)
 // ======================================================
 const sendMailToRegister = async (userMail, token) => {
-  const urlConfirm = `${URL_BACKEND}/api/usuarios/confirmar/${token}`;
+  const urlConfirm = `${URL_BACKEND}/confirmar/${token}`;
 
   const html = `
     <h1>Bienvenido a Vibe-U 🎓</h1>

@@ -18,7 +18,8 @@ app.use(cors({
     origin: [
         process.env.URL_FRONTEND,
         "http://localhost:5173",  // para desarrollo
-        "https://proyectovibe-u.netlify.app"  // tu dominio de producción
+        "https://proyectovibe-u.netlify.app",  // tu dominio de producción
+        "https://vibeu-intento.netlify.app/login"  // otro dominio permitido
     ],
     credentials: true
 }));
