@@ -40,7 +40,8 @@ app.use(
 // 🔥 MIDDLEWARES
 // =============================
 app.use(express.json({ limit: "10mb" }));
-
+// Variables globales
+app.set("port", process.env.PORT || 3000);
 // Cloudinary
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
