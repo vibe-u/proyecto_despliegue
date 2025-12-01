@@ -1,5 +1,5 @@
 import Usuario from "../models/Usuario.js";
-import { sendMailToRegister, sendMailToRecoveryPassword } from "../config/nodemailer.js";
+import { sendMailToRegister, sendMailToRecoveryPassword } from "../config/nodemailer.js";  // Usando Resend
 
 // =========================================================
 // 🔵 REGISTRO
@@ -23,6 +23,7 @@ const registro = async (req, res) => {
         const token = nuevoUsuario.createToken();
         nuevoUsuario.token = token;
 
+        // Enviar el correo de registro usando Resend
         await sendMailToRegister(correoInstitucional, token);
         await nuevoUsuario.save();
 
@@ -32,7 +33,6 @@ const registro = async (req, res) => {
         res.status(500).json({ msg: `❌ Error en el servidor: ${error.message}` });
     }
 };
-
 
 // =========================================================
 // 🔵 CONFIRMAR CORREO
@@ -57,7 +57,6 @@ const confirmarMail = async (req, res) => {
     }
 };
 
-
 // =========================================================
 // 🔵 RECUPERAR CONTRASEÑA (ENVIAR TOKEN)
 // =========================================================
@@ -77,6 +76,7 @@ const recuperarPassword = async (req, res) => {
         const token = usuarioBDD.createToken();
         usuarioBDD.token = token;
 
+        // Enviar el correo de recuperación usando Resend
         await sendMailToRecoveryPassword(correoInstitucional, token);
         await usuarioBDD.save();
 
@@ -86,7 +86,6 @@ const recuperarPassword = async (req, res) => {
         res.status(500).json({ msg: `❌ Error en el servidor - ${error.message}` });
     }
 };
-
 
 // =========================================================
 // 🔵 COMPROBAR TOKEN PARA RECUPERACIÓN
@@ -107,13 +106,11 @@ const comprobarTokenPassword = async (req, res) => {
     }
 };
 
-
 // =========================================================
 // 🔵 CREAR NUEVO PASSWORD
 // =========================================================
 const crearNuevoPassword = async (req, res) => {
     try {
-        // La propiedad 'confirmpassword' debe ser enviada desde el frontend.
         const { password, confirmpassword } = req.body;
         const { token } = req.params;
 
@@ -141,7 +138,6 @@ const crearNuevoPassword = async (req, res) => {
         res.status(500).json({ msg: `❌ Error en el servidor - ${error.message}` });
     }
 };
-
 
 // =========================================================
 // 🔵 LOGIN (CON VALIDACIÓN DE ROL)
@@ -172,7 +168,7 @@ const loginUsuario = async (req, res) => {
             return res.status(400).json({ msg: "Contraseña incorrecta" });
         }
 
-        // 👀 VALIDACIÓN CLAVE: ROL SELECCIONADO VS ROL REAL GUARDADO
+        // VALIDACIÓN CLAVE: ROL SELECCIONADO VS ROL REAL GUARDADO
         if (usuarioBDD.rol !== rol) {
             return res.status(403).json({
                 msg: `No tienes permiso para ingresar como ${rol}.`
@@ -194,7 +190,6 @@ const loginUsuario = async (req, res) => {
         res.status(500).json({ msg: `Error en el servidor: ${error.message}` });
     }
 };
-
 
 // =========================================================
 // 🔵 PERFIL (TOKEN VALIDADO)
@@ -235,6 +230,7 @@ const actualizarUsuario = async (req, res) => {
         res.status(500).json({ msg: "Error al actualizar información" });
     }
 };
+
 // =========================================================
 // 🔵 ACTUALIZAR CONTRASEÑA
 // =========================================================
