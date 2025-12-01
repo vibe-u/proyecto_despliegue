@@ -18,7 +18,8 @@ const allowedOrigins = [
     process.env.URL_FRONTEND,
     "http://localhost:5173",
     "https://proyectovibe-u.netlify.app",
-    "https://proyecto-despliegue-7csb.onrender.com"
+    "https://proyecto-despliegue-7csb.onrender.com",
+    "https://proyecto-despliegue-npem.onrender.com"
 ];
 
 app.use(
