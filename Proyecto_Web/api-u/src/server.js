@@ -17,7 +17,8 @@ const app = express();
 const allowedOrigins = [
     process.env.URL_FRONTEND,
     "http://localhost:5173",
-    "https://proyectovibe-u.netlify.app"
+    "https://proyectovibe-u.netlify.app",
+    "https://proyecto-despliegue-7csb.onrender.com"
 ];
 
 app.use(
