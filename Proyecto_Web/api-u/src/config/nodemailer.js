@@ -1,17 +1,27 @@
 // src/config/nodemailer.js
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 dotenv.config();
 
-// 🔹 Variables de entorno
-const { RESEND_API_KEY, URL_BACKEND, URL_FRONTEND, USER_EMAIL } = process.env;
-
-if (!RESEND_API_KEY || !URL_BACKEND || !URL_FRONTEND || !USER_EMAIL) {
+// 🔹 Verificar variables de entorno
+const { USER_EMAIL, USER_PASS, URL_BACKEND, URL_FRONTEND } = process.env;
+if (!USER_EMAIL || !USER_PASS || !URL_BACKEND || !URL_FRONTEND) {
   throw new Error("❌ Falta configurar alguna variable de entorno en .env");
 }
 
-// 🔹 Inicializamos Resend
-const resend = new Resend(RESEND_API_KEY);
+// 🔹 Transportador SMTP Gmail
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true, // true para 465, false para 587
+  auth: {
+    user: process.env.USER_EMAIL,
+    pass: process.env.USER_PASS,
+  },
+  tls: {
+    rejectUnauthorized: false
+  }
+});
 
 // ======================================================
 // 🚫 Lista negra de dominios
@@ -34,30 +44,26 @@ const isBlackListed = (email) => {
 };
 
 // ======================================================
-// 🔹 Función genérica de envío de email
+// 🔹 Función genérica para envíos de registro
 // ======================================================
 const sendMail = async (to, subject, html) => {
+  // 🚫 Bloquear dominios de la lista negra
   if (isBlackListed(to)) {
     console.log(`❌ Correo bloqueado por lista negra: ${to}`);
     throw new Error("Correo no permitido. Usa tu correo institucional.");
   }
 
   try {
-    const res = await resend.emails.send({
-      from: `Vibe-U 🎓 <${USER_EMAIL}>`, 
+    const info = await transporter.sendMail({
+      from: `"Vibe-U 🎓" <${USER_EMAIL}>`,
       to,
       subject,
-      html
+      html,
     });
-
-    // 💡 MODIFICACIÓN CLAVE AQUÍ: Accede a la propiedad que realmente tiene el ID.
-    // Usamos el operador de encadenamiento opcional (?.) para evitar errores si la estructura cambia.
-    const emailId = res.id || (res.data && res.data[0]?.id) || "ID no disponible";
-
-    console.log("📩 Email enviado con Resend:", emailId);
-    return res;
+    console.log("📩 Email de registro enviado:", info.messageId);
+    return info;
   } catch (error) {
-    console.error("❌ Error enviando email de registro:", error.response || error.message || error);
+    console.error("❌ Error enviando email de registro:", error);
     throw error;
   }
 };
@@ -66,7 +72,8 @@ const sendMail = async (to, subject, html) => {
 // 🟣 CORREO DE CONFIRMACIÓN (Registro)
 // ======================================================
 const sendMailToRegister = async (userMail, token) => {
-  const urlConfirm = `${URL_BACKEND}/confirmar/${token}`;
+  const urlConfirm = `${URL_BACKEND}/api/usuarios/confirmar/${token}`;
+
   const html = `
     <h1>Bienvenido a Vibe-U 🎓</h1>
     <p>Gracias por registrarte. Confirma tu correo haciendo clic en el siguiente enlace:</p>
@@ -79,6 +86,7 @@ const sendMailToRegister = async (userMail, token) => {
     <hr>
     <footer>El equipo de Vibe-U 🎓</footer>
   `;
+
   return sendMail(userMail, "Confirma tu cuenta en VIBE-U 💜", html);
 };
 
@@ -87,6 +95,7 @@ const sendMailToRegister = async (userMail, token) => {
 // ======================================================
 const sendMailToRecoveryPassword = async (userMail, token) => {
   const urlRecovery = `${URL_FRONTEND}/recuperarpassword/${token}`;
+
   const html = `
     <h1>Vibe-U 💜</h1>
     <p>Has solicitado restablecer tu contraseña.</p>
@@ -99,6 +108,7 @@ const sendMailToRecoveryPassword = async (userMail, token) => {
     <hr>
     <footer>El equipo de Vibe-U 💜</footer>
   `;
+
   return sendMail(userMail, "Recupera tu contraseña en Vibe-U 🎓", html);
 };
 
