@@ -15,11 +15,7 @@ const app = express();
 // 🔥 CORS CONFIG CORRECTA
 // =============================
 const allowedOrigins = [
-    process.env.URL_FRONTEND,
-    "http://localhost:5173",
-    "https://proyectovibe-u.netlify.app",
-    "https://proyecto-despliegue-7csb.onrender.com",
-    "https://proyecto-despliegue-npem.onrender.com"
+    process.env.URL_FRONTEND
 ];
 
 app.use(
@@ -60,7 +56,7 @@ app.get("/", (req, res) => res.json({
 
 app.use("/api/usuarios", usuarioRouter);
 
-// 404
+// Manejo de rutas no encontradas
 app.use((req, res) => res.status(404).send("Endpoint no encontrado - 404"));
 
 // =============================

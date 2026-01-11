@@ -1,5 +1,5 @@
 import Usuario from "../models/Usuario.js";
-import { sendMailToRegister, sendMailToRecoveryPassword } from "../config/nodemailer.js";  // Usando Resend
+import { sendMailToRegister, sendMailToRecoveryPassword } from "../config/nodemailer.js";  
 
 // =========================================================
 // 🔵 REGISTRO
@@ -23,7 +23,7 @@ const registro = async (req, res) => {
         const token = nuevoUsuario.createToken();
         nuevoUsuario.token = token;
 
-        // Enviar el correo de registro usando Resend
+        // Enviar el correo de registro
         await sendMailToRegister(correoInstitucional, token);
         await nuevoUsuario.save();
 

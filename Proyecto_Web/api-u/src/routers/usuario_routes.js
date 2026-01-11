@@ -1,16 +1,5 @@
 import express from "express";
-import {
-    registro,
-    confirmarMail,
-    recuperarPassword,
-    comprobarTokenPassword,
-    crearNuevoPassword,
-    loginUsuario,
-    perfil,
-    actualizarUsuario,
-    actualizarPassword
-} from "../controllers/usuario_controller.js";
-
+import {registro,confirmarMail,recuperarPassword,comprobarTokenPassword,crearNuevoPassword,loginUsuario,perfil,actualizarUsuario,actualizarPassword} from "../controllers/usuario_controller.js";
 import { verificarTokenJWT } from "../middlewares/JWT.js";
 
 const router = express.Router();
